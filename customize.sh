@@ -164,7 +164,7 @@ apt install -y                              \
     cuda-drivers-${nvidia_kernel_ver}       \
     `# NVIDIA Open GPU kernel module`       \
     nvidia-kernel-open-${nvidia_kernel_ver} \
-	nvidia-container-toolkit                \
+    nvidia-container-toolkit                \
     `# utils `                              \
     openssh-client openssh-server libc6-dev \
     jq gpg shc gnupg-agent bash-completion  \
