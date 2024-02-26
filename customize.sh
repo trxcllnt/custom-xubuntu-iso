@@ -79,7 +79,7 @@ echo "Downloading GitHub Desktop" \
  && wget --no-hsts -qO - https://apt.packages.shiftkey.dev/gpg.key \
   | gpg --dearmor --yes \
   | tee /etc/apt/trusted.gpg.d/shiftkey-packages.gpg > /dev/null \
-&& echo "deb [arch=$(dpkg --print-architecture)] https://apt.packages.shiftkey.dev/ubuntu/ any main" \
+ && echo "deb [arch=$(dpkg --print-architecture)] https://apt.packages.shiftkey.dev/ubuntu/ any main" \
   | tee /etc/apt/sources.list.d/shiftkey-packages.list >/dev/null;
 
 ###############################################################################
@@ -160,10 +160,13 @@ apt install -y --no-install-recommends \
 
 nvidia_kernel_ver="$(apt-cache search nvidia-kernel-open- | cut -sd' ' -f1 | sort -rh | head -n1 | cut -d'-' -f4)";
 
-apt install -y                              \
-    cuda-drivers-${nvidia_kernel_ver}       \
+apt install -y --no-install-recommends      \
     `# NVIDIA Open GPU kernel module`       \
     nvidia-kernel-open-${nvidia_kernel_ver} \
+    ;
+
+apt install -y                              \
+    cuda-drivers-${nvidia_kernel_ver}       \
     nvidia-container-toolkit                \
     `# utils `                              \
     openssh-client openssh-server libc6-dev \
