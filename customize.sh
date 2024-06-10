@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+# shellcheck disable=SC1091
+
 # Ensure we're in this script's directory
 cd "$( cd "$( dirname "$(realpath -m "${BASH_SOURCE[0]}")" )" && pwd )";
 
@@ -31,7 +33,7 @@ install -m 0755 -d /usr/share/keyrings;
 install -m 0755 -d /etc/apt/trusted.gpg.d;
 
 # shellcheck disable=SC2072
-if [[ "$(. /etc/os-release;echo $VERSION_ID)" < "24.04" ]]; then
+if [[ "$(. /etc/os-release;echo "$VERSION_ID")" < "24.04" ]]; then
     # Make a temp user 999 so docker doesn't try to use this UID
     adduser --system --no-create-home --uid 999 --group temp_user;
 fi
@@ -40,7 +42,7 @@ fi
 # CUDA ########################################################################
 ###############################################################################
 wget --no-hsts -qO /opt/cuda-keyring_1.1-1_all.deb \
-    https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb;
+    "https://developer.download.nvidia.com/compute/cuda/repos/$(. /etc/os-release; tr -d '.' <<< "$ID$VERSION_ID")/x86_64/cuda-keyring_1.1-1_all.deb";
 
 ###############################################################################
 # Chromium ####################################################################
@@ -65,7 +67,7 @@ echo "Downloading Docker" \
 echo "Downloading nvidia-container-toolkit" \
  && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey \
   | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/nvidia-container-toolkit-keyring.gpg \
- && curl -s -L https://nvidia.github.io/libnvidia-container/$(. /etc/os-release;echo $ID$VERSION_ID)/libnvidia-container.list \
+ && curl -s -L "https://nvidia.github.io/libnvidia-container/$(. /etc/os-release; echo "$ID$VERSION_ID")/libnvidia-container.list" \
   | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list > /dev/null;
 
 ###############################################################################
