@@ -30,8 +30,11 @@ install -m 0755 -d /usr/share/icons;
 install -m 0755 -d /usr/share/keyrings;
 install -m 0755 -d /etc/apt/trusted.gpg.d;
 
-# Make a temp user 999 so docker doesn't try to use this UID
-adduser --system --no-create-home --uid 999 --group temp_user;
+# shellcheck disable=SC2072
+if [[ "$(. /etc/os-release;echo $VERSION_ID)" < "24.04" ]]; then
+    # Make a temp user 999 so docker doesn't try to use this UID
+    adduser --system --no-create-home --uid 999 --group temp_user;
+fi
 
 ###############################################################################
 # CUDA ########################################################################
