@@ -79,10 +79,10 @@ echo "Downloading GitHub CLI" \
   | tee /etc/apt/sources.list.d/github-cli.list > /dev/null;
 
 echo "Downloading GitHub Desktop" \
- && wget --no-hsts -qO - https://apt.packages.shiftkey.dev/gpg.key \
+ && wget --no-hsts -qO - https://mirror.mwt.me/shiftkey-desktop/gpgkey \
   | gpg --dearmor --yes \
-  | tee /etc/apt/trusted.gpg.d/shiftkey-packages.gpg > /dev/null \
- && echo "deb [arch=$(dpkg --print-architecture)] https://apt.packages.shiftkey.dev/ubuntu/ any main" \
+  | tee /etc/apt/trusted.gpg.d/mwt-github-desktop.gpg > /dev/null \
+ && echo "deb [arch=$(dpkg --print-architecture)] https://mirror.mwt.me/shiftkey-desktop/deb/ any main" \
   | tee /etc/apt/sources.list.d/shiftkey-packages.list >/dev/null;
 
 ###############################################################################
