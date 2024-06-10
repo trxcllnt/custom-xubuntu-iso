@@ -205,15 +205,6 @@ apt install -y                              \
     sierra-gtk-theme-git                    \
     xfce4-appmenu-plugin                    \
     vala-panel-appmenu                      \
-    `# unity-gtk2-module`                   \
-    `# unity-gtk3-module`                   \
-    `# unity-gtk-module-common`             \
-    `# libdbusmenu-glib4`                   \
-    `# libdbusmenu-gtk3-4`                  \
-    `# libdbusmenu-gtk4`                    \
-    `# appmenu-gtk2-module`                 \
-    `# appmenu-gtk3-module`                 \
-    `# appmenu-gtk-module-common`           \
     ;
 
 # Install yarn completions
