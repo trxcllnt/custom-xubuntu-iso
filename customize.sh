@@ -32,6 +32,7 @@ install -m 0755 -d /usr/share/icons;
 install -m 0755 -d /usr/share/keyrings;
 install -m 0755 -d /etc/apt/trusted.gpg.d;
 
+pkgs=();
 os_codename="$(. /etc/os-release; echo "$UBUNTU_CODENAME")";
 os_major_version="$(. /etc/os-release; echo "$VERSION_ID" | cut -d'.' -f1)";
 os_minor_version="$(. /etc/os-release; echo "$VERSION_ID" | cut -d'.' -f2)";
@@ -132,11 +133,16 @@ echo "Downloading Slack" \
 # Install sierra-gtk-theme and plank
 add-apt-repository -yn ppa:ricotz/docky;
 
-echo "Adding Ubuntu High Sierra Theme apt repository" \
+# Install sierra-gtk-theme
+if [[ "$(. /etc/os-release;echo "$VERSION_ID")" < "24.04" ]]; then
+    echo "Adding Ubuntu High Sierra Theme apt repository" \
  && curl "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x8c65a650570c1da17b725012bc012ecbbc24d881" \
   | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/dyatlov-igor.gpg \
  && echo "deb [arch=$(dpkg --print-architecture)]  http://ppa.launchpad.net/dyatlov-igor/sierra-theme/ubuntu bionic main" \
   | tee /etc/apt/sources.list.d/dyatlov-igor-ubuntu-sierra-theme-bionic.list >/dev/null;
+
+    pkgs+=(sierra-gtk-theme-git);
+fi
 
 # Download autokey
 AUTOKEY_VERSION="$(curl -s https://api.github.com/repos/autokey/autokey/releases/latest | jq -r ".tag_name" | tr -d 'v')";
@@ -215,9 +221,10 @@ apt install -y                              \
     dconf-editor                            \
     xfce4-goodies                           \
     humanity-icon-theme                     \
-    sierra-gtk-theme-git                    \
     xfce4-appmenu-plugin                    \
     vala-panel-appmenu                      \
+    `# conditionally installed packages`    \
+    "${pkgs[@]}"                            \
     ;
 
 # Install yarn completions
