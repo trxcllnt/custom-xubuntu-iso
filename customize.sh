@@ -32,31 +32,43 @@ install -m 0755 -d /usr/share/icons;
 install -m 0755 -d /usr/share/keyrings;
 install -m 0755 -d /etc/apt/trusted.gpg.d;
 
+os_codename="$(. /etc/os-release; echo "$UBUNTU_CODENAME")";
+os_major_version="$(. /etc/os-release; echo "$VERSION_ID" | cut -d'.' -f1)";
+os_minor_version="$(. /etc/os-release; echo "$VERSION_ID" | cut -d'.' -f2)";
+os_version_dot="$(. /etc/os-release; echo "$ID$os_major_version.$os_minor_version")";
+os_version_nodot="$(. /etc/os-release; echo "$ID$os_major_version$os_minor_version")";
+
 # shellcheck disable=SC2072
 if [[ "$(. /etc/os-release;echo "$VERSION_ID")" < "24.04" ]]; then
     # Make a temp user 999 so docker doesn't try to use this UID
     adduser --system --no-create-home --uid 999 --group temp_user;
+else
+    os_codename="jammy";
+    os_version_dot="$(. /etc/os-release; echo "$ID$((os_major_version - 2)).$os_minor_version")";
+    os_version_nodot="$(. /etc/os-release; echo "$ID$((os_major_version - 2))$os_minor_version")";
 fi
 
 ###############################################################################
 # CUDA ########################################################################
 ###############################################################################
-wget --no-hsts -qO /opt/cuda-keyring_1.1-1_all.deb \
-    "https://developer.download.nvidia.com/compute/cuda/repos/$(. /etc/os-release; tr -d '.' <<< "$ID$VERSION_ID")/x86_64/cuda-keyring_1.1-1_all.deb";
+echo "Downloading cuda keyring" \
+ && wget --no-hsts -qO /opt/cuda-keyring_1.1-1_all.deb \
+    "https://developer.download.nvidia.com/compute/cuda/repos/$os_version_nodot/x86_64/cuda-keyring_1.1-1_all.deb";
 
 ###############################################################################
 # Chromium ####################################################################
 ###############################################################################
-echo "Downloading UnGoogled Chromium" \
- && curl -fsSL https://download.opensuse.org/repositories/home:ungoogled_chromium/Ubuntu_Jammy/Release.key \
-  | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/ungoogled_chromium.gpg \
- && echo "deb [arch=$(dpkg --print-architecture)] http://download.opensuse.org/repositories/home:/ungoogled_chromium/Ubuntu_Jammy/ /" \
-  | tee /etc/apt/sources.list.d/ungoogled_chromium.list >/dev/null;
+# echo "Adding UnGoogled Chromium apt repository" \
+#  && curl -fsSL "https://download.opensuse.org/repositories/home:ungoogled_chromium/Ubuntu_${os_codename^}/Release.key" \
+#   | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/ungoogled_chromium.gpg \
+#  && echo "deb [arch=$(dpkg --print-architecture)] http://download.opensuse.org/repositories/home:/ungoogled_chromium/Ubuntu_${os_codename^}/ /" \
+#   | tee /etc/apt/sources.list.d/ungoogled_chromium.list >/dev/null;
+add-apt-repository -yn ppa:xtradeb/apps
 
 ###############################################################################
 # Docker ######################################################################
 ###############################################################################
-echo "Downloading Docker" \
+echo "Adding Docker apt repository" \
  && curl -fsSL "https://download.docker.com/linux/ubuntu/gpg" \
   | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/docker.gpg \
  `# && chmod a+r /etc/apt/trusted.gpg.d/docker.gpg` \
@@ -64,23 +76,23 @@ echo "Downloading Docker" \
   | tee /etc/apt/sources.list.d/docker.list >/dev/null;
 
 # Install nvidia-container-toolkit
-echo "Downloading nvidia-container-toolkit" \
+echo "Adding nvidia-container-toolkit apt repository" \
  && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey \
   | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/nvidia-container-toolkit-keyring.gpg \
- && curl -s -L "https://nvidia.github.io/libnvidia-container/$(. /etc/os-release; echo "$ID$VERSION_ID")/libnvidia-container.list" \
+ && curl -s -L "https://nvidia.github.io/libnvidia-container/$os_version_dot/libnvidia-container.list" \
   | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list > /dev/null;
 
 ###############################################################################
 # GitHub CLI + Desktop ########################################################
 ###############################################################################
-echo "Downloading GitHub CLI" \
+echo "Adding GitHub CLI apt repository" \
  && curl -fsSL "https://cli.github.com/packages/githubcli-archive-keyring.gpg" \
   | dd of=/etc/apt/trusted.gpg.d/githubcli-archive-keyring.gpg \
  `# && chmod go+r /etc/apt/trusted.gpg.d/githubcli-archive-keyring.gpg` \
  && echo "deb [arch=$(dpkg --print-architecture)] https://cli.github.com/packages stable main" \
   | tee /etc/apt/sources.list.d/github-cli.list > /dev/null;
 
-echo "Downloading GitHub Desktop" \
+echo "Adding GitHub Desktop apt repository" \
  && wget --no-hsts -qO - https://mirror.mwt.me/shiftkey-desktop/gpgkey \
   | gpg --dearmor --yes \
   | tee /etc/apt/trusted.gpg.d/mwt-github-desktop.gpg > /dev/null \
@@ -90,7 +102,7 @@ echo "Downloading GitHub Desktop" \
 ###############################################################################
 # node.js #####################################################################
 ###############################################################################
-echo "Downloading yarn" \
+echo "Adding yarn apt repository" \
  && curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg \
   | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/yarnpkg.gpg \
  `# && chmod a+r /etc/apt/trusted.gpg.d/yarnpkg.gpg` \
@@ -100,7 +112,7 @@ echo "Downloading yarn" \
 ###############################################################################
 # VSCode ######################################################################
 ###############################################################################
-echo "Downloading VSCode" \
+echo "Adding VSCode apt repository" \
  && curl https://packages.microsoft.com/keys/microsoft.asc \
   | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/packages.microsoft.gpg \
  `# && chmod a+r /etc/apt/trusted.gpg.d/packages.microsoft.gpg` \
@@ -119,13 +131,12 @@ echo "Downloading Slack" \
 ###############################################################################
 # Install sierra-gtk-theme and plank
 add-apt-repository -yn ppa:ricotz/docky;
-add-apt-repository -yn ppa:dyatlov-igor/sierra-theme || true;
-rm /etc/apt/sources.list.d/dyatlov-igor-ubuntu-sierra-theme-*.list;
 
-cat <<EOF >/etc/apt/sources.list.d/dyatlov-igor-ubuntu-sierra-theme-bionic.list
-deb http://ppa.launchpad.net/dyatlov-igor/sierra-theme/ubuntu bionic main
-# deb-src http://ppa.launchpad.net/dyatlov-igor/sierra-theme/ubuntu bionic main
-EOF
+echo "Adding Ubuntu High Sierra Theme apt repository" \
+ && curl "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x8c65a650570c1da17b725012bc012ecbbc24d881" \
+  | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/dyatlov-igor.gpg \
+ && echo "deb [arch=$(dpkg --print-architecture)]  http://ppa.launchpad.net/dyatlov-igor/sierra-theme/ubuntu bionic main" \
+  | tee /etc/apt/sources.list.d/dyatlov-igor-ubuntu-sierra-theme-bionic.list >/dev/null;
 
 # Download autokey
 AUTOKEY_VERSION="$(curl -s https://api.github.com/repos/autokey/autokey/releases/latest | jq -r ".tag_name" | tr -d 'v')";
@@ -138,11 +149,11 @@ echo "Downloading autokey" \
 ###############################################################################
 # CMake #######################################################################
 ###############################################################################
-echo "Downloading kitware apt sources" \
+echo "Adding kitware apt repository" \
  && wget --no-hsts -qO - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
   | gpg --dearmor - \
   | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
- && echo -e "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" \
+ && echo -e "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $os_codename main" \
   | tee /etc/apt/sources.list.d/kitware.list >/dev/null;
 
 chmod 0644 /etc/apt/trusted.gpg.d/*.gpg || true;
