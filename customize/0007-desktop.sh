@@ -20,18 +20,37 @@ EOF
 deb [arch=$(dpkg --print-architecture)] https://ppa.launchpadcontent.net/xtradeb/apps/ubuntu $(. /etc/os-release; echo ${VERSION_CODENAME}) main
 EOF
 
-    mkdir -p /tmp/sierra-gtk-theme;
-
     echo "Adding Ubuntu High Sierra Theme" \
-    curl -fsSL --compressed "https://github.com/vinceliuice/Sierra-gtk-theme/archive/refs/tags/2019-12-16.tar.gz" \
-  | tar -C /tmp/sierra-gtk-theme -xzf - --strip-components=1;
+ && curl -fsSL --compressed -o /tmp/sierra-gtk-theme.zip "https://github.com/vinceliuice/Sierra-gtk-theme/archive/refs/tags/2019-12-16.zip" \
+ && unzip -d /tmp -o /tmp/sierra-gtk-theme.zip \
+ && rm -rf /tmp/sierra-gtk-theme \
+ && mv /tmp/Sierra-gtk-theme-* /tmp/sierra-gtk-theme \
+ && chmod +x /tmp/sierra-gtk-theme/install.sh;
 }
 
-desktop_install() {
+desktop_packages() {
     local -;
     set -euo pipefail;
 
-    /tmp/sierra-gtk-theme/install.sh --no-apple --gdm;
+    echo ungoogled-chromium;
+    echo plank;
+    echo xarchiver;
+    echo dconf-cli;
+    echo dconf-editor;
+    echo xfce4-goodies;
+    echo humanity-icon-theme;
+    echo xfce4-appmenu-plugin;
+    echo vala-panel-appmenu;
+    echo gtk2-engines-murrine;
+    echo gtk2-engines-pixbuf;
+    echo unity-gtk{2,3}-module;
+}
+
+desktop_postinstall() {
+    local -;
+    set -euo pipefail;
+
+    /tmp/sierra-gtk-theme/install.sh --no-apple;
 
     cp -ar etc/skel/.config/autostart /etc/skel/.config/;
     cp -ar etc/skel/.config/plank /etc/skel/.config/;
@@ -40,26 +59,16 @@ desktop_install() {
     cp -ar etc/skel/.config/xfce4 /etc/skel/.config/;
 
     git -C /etc/skel/.config/xfce4/ init;
+    git -C /etc/skel/.config/xfce4/ config user.name "Anonymous";
+    git -C /etc/skel/.config/xfce4/ config user.email "<>";
     git -C /etc/skel/.config/xfce4/ add .;
     git -C /etc/skel/.config/xfce4/ commit -m "skeleton";
-}
 
-desktop_packages() {
-    local -;
-    set -euo pipefail;
-
-    echo "ungoogled-chromium plank xarchiver dconf-cli dconf-editor xfce4-goodies humanity-icon-theme xfce4-appmenu-plugin vala-panel-appmenu unity-gtk{2,3}-module";
-}
-
-desktop_postinstall() {
-    local -;
-    set -euo pipefail;
+    rm -rf /tmp/sierra-gtk-theme;
 
     curl curl -fsSL --compressed \
         -o /etc/apparmor.d/chromium_browser \
         https://gitlab.com/apparmor/apparmor/-/raw/master/profiles/apparmor/profiles/extras/chromium_browser?ref_type=heads;
-
-    rm -rf /tmp/sierra-gtk-theme;
 
     # Install backgrounds, fonts, and cursors
     if test -f assets.zip; then

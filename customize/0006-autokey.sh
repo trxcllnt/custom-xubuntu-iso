@@ -16,13 +16,14 @@ autokey_preinstall() {
     "https://github.com/autokey/autokey/releases/download/v${AUTOKEY_VERSION}/autokey-gtk_${AUTOKEY_VERSION}_all.deb" \
  && wget --no-hsts -qO /tmp/autokey-common_all.deb \
     "https://github.com/autokey/autokey/releases/download/v${AUTOKEY_VERSION}/autokey-common_${AUTOKEY_VERSION}_all.deb";
+
+    dpkg -i /tmp/autokey-*.deb || true;
 }
 
 autokey_install() {
     local -;
     set -euo pipefail;
 
-    dpkg -i /tmp/autokey-*.deb || true;
     apt install -y --fix-broken --no-install-recommends;
     cp -ar etc/skel/.config/autokey /etc/skel/.config/;
 }

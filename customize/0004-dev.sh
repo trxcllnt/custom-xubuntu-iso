@@ -43,9 +43,6 @@ dev_install() {
     local -;
     set -euo pipefail;
 
-    # Download fzf
-    git clone --depth 1 https://github.com/junegunn/fzf.git /etc/skel/.fzf;
-
     # Install nvm and node
     export NVM_DIR=/etc/skel;
     curl -fsSL --compressed https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash;
@@ -78,7 +75,6 @@ if test -n "${SSH_CONNECTION:-}" && test -z "${SSH_AUTH_SOCK:-}" && type gnome-k
 fi
 EOF
 
-
     cp -ar etc/skel/.{npm,yarn}rc /etc/skel/;
 }
 
@@ -86,12 +82,18 @@ dev_packages() {
     local -;
     set -euo pipefail;
 
-    echo "bear cmake code yarn";
+    echo bear;
+    echo cmake;
+    echo code;
+    echo yarn;
 }
 
 dev_postinstall() {
     local -;
     set -euo pipefail;
+
+    # Download fzf
+    git clone --depth 1 https://github.com/junegunn/fzf.git /etc/skel/.fzf;
 
     # Install npm completions
     echo "Installing npm completions" \

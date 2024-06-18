@@ -46,6 +46,7 @@ if [ "$(id -u)" -lt 1000 ]; then exit 0; fi;
 
 # Add user to the docker group
 sudo usermod -aG docker "$USER";
+systemctl --now enable docker;
 sudo systemctl restart docker;
 
 export DEBIAN_FRONTEND=noninteractive;

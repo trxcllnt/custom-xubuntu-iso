@@ -11,11 +11,6 @@ slack_preinstall() {
     echo "Downloading Slack" \
  && wget --no-hsts -qO /tmp/slack-desktop.deb \
     https://downloads.slack-edge.com/releases/linux/4.33.73/prod/x64/slack-desktop-4.33.73-amd64.deb;
-}
-
-slack_install() {
-    local -;
-    set -euo pipefail;
 
     dpkg -i /tmp/slack-desktop.deb || true;
 }
@@ -24,7 +19,7 @@ slack_packages() {
     local -;
     set -euo pipefail;
 
-    echo "slack-desktop";
+    echo slack-desktop;
 }
 
 slack_postinstall() {

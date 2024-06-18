@@ -27,7 +27,12 @@ docker_packages() {
     local -;
     set -euo pipefail;
 
-    echo "docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras";
+    echo docker-ce;
+    echo docker-ce-cli;
+    echo containerd.io;
+    echo docker-buildx-plugin;
+    echo docker-compose-plugin;
+    echo docker-ce-rootless-extras;
 }
 
 docker_postinstall() {
@@ -47,8 +52,6 @@ docker_postinstall() {
     cat <<"EOF" >> /etc/skel/.bashrc
 export DOCKER_SCAN_SUGGEST=false
 EOF
-
-    systemctl --now enable docker;
 }
 
 add_to_installation docker;

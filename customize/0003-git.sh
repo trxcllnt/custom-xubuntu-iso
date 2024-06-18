@@ -17,13 +17,13 @@ EOF
     echo "Adding GitHub CLI apt repository" \
  && curl -fsSL --compressed "https://cli.github.com/packages/githubcli-archive-keyring.gpg" | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/githubcli-archive-keyring.gpg \
  && cat <<EOF >/etc/apt/sources.list.d/github-cli.list
-deb [arch=$(dpkg --print-architecture)] https://cli.github.com/packages stable main \
+deb [arch=$(dpkg --print-architecture)] https://cli.github.com/packages stable main
 EOF
 
     echo "Adding GitHub Desktop apt repository" \
  && curl -fsSL --compressed https://mirror.mwt.me/shiftkey-desktop/gpgkey | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/mwt-github-desktop.gpg \
  && cat <<EOF >/etc/apt/sources.list.d/github-desktop.list
-deb [arch=$(dpkg --print-architecture)] https://mirror.mwt.me/shiftkey-desktop/deb/ any main \
+deb [arch=$(dpkg --print-architecture)] https://mirror.mwt.me/shiftkey-desktop/deb/ any main
 EOF
 }
 
@@ -31,7 +31,10 @@ git_packages() {
     local -;
     set -euo pipefail;
 
-    echo "git git-lfs gh github-desktop";
+    echo git;
+    echo git-lfs;
+    echo gh;
+    echo github-desktop;
 }
 
 git_postinstall() {

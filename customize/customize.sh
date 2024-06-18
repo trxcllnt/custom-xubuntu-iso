@@ -45,44 +45,50 @@ source <(
 major="${MAJOR_:-"$(cut -d'.' -f1 <<< "${VERSION_ID}")"}";
 minor="${MINOR_:-"$(cut -d'.' -f2 <<< "${VERSION_ID}")"}";
 major="$((major - (major % 2)))";
-echo "os_name=${NAME_:${VERSION_CODENAME}}";
+echo "os_name=${NAME_:-${VERSION_CODENAME}}";
 echo "os_major=${major}";
 echo "os_minor=${minor}";
 echo "os_id_and_ver=${ID}${major}${minor}";
 echo "os_id_and_ver_and_dot=${ID}${major}.${minor}";
 );
     if test -n "${out_-}"; then
-        _upvar                                                 \
-            "${out_}"                                          \
-            "[name]='${os_name-}'"                             \
-            "[major]='${os_major-}'"                           \
-            "[minor]='${os_minor-}'"                           \
-            "[id_and_ver]='${os_id_and_ver-}'"                 \
-            "[id_and_ver_and_dot]='${os_id_and_ver_and_dot-}'" ;
+        eval "${out_}=(\
+            [name]='${os_name-}' \
+            [major]='${os_major-}' \
+            [minor]='${os_minor-}' \
+            [id_and_ver]='${os_id_and_ver-}' \
+            [id_and_ver_and_dot]='${os_id_and_ver_and_dot-}' \
+        )";
+        # _upvar                                                 \
+        #     "${out_}"                                          \
+        #     "[name]='${os_name-}'"                             \
+        #     "[major]='${os_major-}'"                           \
+        #     "[minor]='${os_minor-}'"                           \
+        #     "[id_and_ver]='${os_id_and_ver-}'"                 \
+        #     "[id_and_ver_and_dot]='${os_id_and_ver_and_dot-}'" ;
     fi
 }
 
 get_os_info_jammy() {
     local -;
-    # shellcheck disable=SC2034
-    local -A os_jammy;
-    get_os_info os_jammy jammy "22";
-    readarray -t os_jammy_values <(_expand_assoc os_jammy);
-    _upvar "$1" "${os_jammy_values[@]}";
+    get_os_info "$1" jammy "22";
 }
 
 list_script_paths() {
     local -;
     local -A os;
+    local -a files=("$@");
+    set -- ;
     get_os_info os;
     local file;
-    for file in "$@"; do
+    for file in "${files[@]}"; do
         if test -x "${os[name]}/${file}"; then
-            echo "${os[name]}/${file}";
+            realpath -m "${os[name]}/${file}";
         elif test -x "${file}"; then
-            echo "${file}";
+            realpath -m "${file}";
         fi
     done
+    return 0;
 }
 
 export pkgs_to_install=();
@@ -100,7 +106,7 @@ install_packages() {
     pkgs_to_install=();
 
     for name in "${list[@]}"; do
-        if test -v "${name}_preinstall"; then
+        if declare -F "${name}_preinstall" >/dev/null 2>&1; then
             "${name}_preinstall";
         fi
     done
@@ -110,28 +116,28 @@ install_packages() {
     apt update;
 
     for name in "${list[@]}"; do
-        if test -v "${name}_install"; then
+        if declare -F "${name}_install" >/dev/null 2>&1; then
             "${name}_install";
         fi
-        if test -v "${name}_packages"; then
-            readarray -O ${#pkgs[@]} -t pkgs <("${name}_packages" | tr -s '[:space:]' | tr '[:blank:]' '\n');
+        if declare -F "${name}_packages" >/dev/null 2>&1; then
+            readarray -O ${#pkgs[@]} -t pkgs < <("${name}_packages" | tr '[:blank:]' '\n' | tr -s '[:space:]');
         fi
     done
 
     apt update;
 
     if test ${#pkgs[@]} -gt 0; then
-        apt install -y --no-install-recommends "${pkgs[@]}";
+        apt install -y --no-install-recommends "${pkgs[@]}" || exit 1;
     fi
 
     for name in "${list[@]}"; do
-        if test -v "${name}_postinstall"; then
+        if declare -F "${name}_postinstall" >/dev/null 2>&1; then
             "${name}_postinstall";
         fi
     done
 }
 
-readarray -t script_paths <(list_script_paths ./00*.sh);
+readarray -t script_paths < <(list_script_paths ./00*.sh);
 
 for path in "${script_paths[@]}"; do
     # shellcheck disable=SC1090
@@ -147,6 +153,4 @@ find /tmp/               \
     -mindepth 1 -prune   \
     -exec rm -rf -- {}   \;
 
-if test -d /customize; then
-    rm -rf /customize;
-fi
+rm -rf "$(pwd)";
