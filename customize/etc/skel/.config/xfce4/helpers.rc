@@ -1,0 +1,4 @@
+WebBrowser=chromium-browser
+MailReader=thunderbird
+FileManager=thunar
+TerminalEmulator=xfce4-terminal
