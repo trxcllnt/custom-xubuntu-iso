@@ -33,6 +33,13 @@ desktop_packages() {
     set -euo pipefail;
 
     echo openssh-{client,server};
+    echo cifs-utils;
+    echo efibootmgr;
+    echo gnome-disk-utility;
+    echo lightdm-gtk-greeter-settings;
+    echo mousepad;
+    echo network-manager-pptp;
+    echo ristretto;
     echo network-manager-openconnect-gnome;
     echo ungoogled-chromium;
     echo plank;
@@ -42,6 +49,9 @@ desktop_packages() {
     echo xfce4-goodies;
     echo humanity-icon-theme;
     echo xfce4-appmenu-plugin;
+    echo xfce4-cpugraph-plugin;
+    echo xfce4-netload-plugin;
+    echo xfce4-taskmanager;
     echo vala-panel-appmenu;
     echo gtk2-engines-murrine;
     echo gtk2-engines-pixbuf;
@@ -68,7 +78,7 @@ desktop_postinstall() {
 
     rm -rf /tmp/sierra-gtk-theme;
 
-    curl curl -fsSL --compressed \
+    curl -fsSL --compressed \
         -o /etc/apparmor.d/chromium_browser \
         https://gitlab.com/apparmor/apparmor/-/raw/master/profiles/apparmor/profiles/extras/chromium_browser?ref_type=heads;
 

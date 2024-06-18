@@ -107,7 +107,7 @@ install_packages() {
 
     for name in "${list[@]}"; do
         if declare -F "${name}_preinstall" >/dev/null 2>&1; then
-            "${name}_preinstall";
+            "${name}_preinstall" || exit 1;
         fi
     done
 
@@ -117,7 +117,7 @@ install_packages() {
 
     for name in "${list[@]}"; do
         if declare -F "${name}_install" >/dev/null 2>&1; then
-            "${name}_install";
+            "${name}_install" || exit 1;
         fi
         if declare -F "${name}_packages" >/dev/null 2>&1; then
             readarray -O ${#pkgs[@]} -t pkgs < <("${name}_packages" | tr '[:blank:]' '\n' | tr -s '[:space:]');
@@ -132,7 +132,7 @@ install_packages() {
 
     for name in "${list[@]}"; do
         if declare -F "${name}_postinstall" >/dev/null 2>&1; then
-            "${name}_postinstall";
+            "${name}_postinstall" || exit 1;
         fi
     done
 }
