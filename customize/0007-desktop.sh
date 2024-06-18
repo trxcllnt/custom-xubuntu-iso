@@ -32,6 +32,8 @@ desktop_packages() {
     local -;
     set -euo pipefail;
 
+    echo openssh-{client,server};
+    echo network-manager-openconnect-gnome;
     echo ungoogled-chromium;
     echo plank;
     echo xarchiver;
