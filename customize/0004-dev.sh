@@ -44,7 +44,7 @@ dev_install() {
     set -euo pipefail;
 
     # Install nvm and node
-    export NVM_DIR=/etc/skel;
+    export NVM_DIR=/etc/skel/.nvm;
     curl -fsSL --compressed https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash;
 
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; # This loads nvm
