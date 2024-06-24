@@ -57,7 +57,7 @@ echo "" | sudo tee /etc/apt/apt.conf.d/20apt-esm-hook.conf;
 
 # Install the CUDA toolkit
 if ! dpkg -s cuda > /dev/null 2>&1; then
-    sudo apt install -y --no-install-recommends cuda;
+    sudo apt install -y --no-install-recommends cuda nvidia-settings;
 fi
 
 cat <<"EOF" >> ~/.bashrc

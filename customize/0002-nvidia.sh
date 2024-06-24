@@ -31,9 +31,7 @@ nvidia_packages() {
     local -;
     set -euo pipefail;
 
-    local nvidia_kernel_ver=;
-    nvidia_kernel_ver="$(apt-cache search nvidia-kernel-open- | cut -sd' ' -f1 | sort -rh | head -n1 | cut -d'-' -f4)";
-    echo "nvidia-driver-${nvidia_kernel_ver}";
+    echo cuda-drivers;
     echo nvidia-container-toolkit;
 }
 
