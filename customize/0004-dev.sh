@@ -11,18 +11,15 @@ dev_preinstall() {
     local -A os;
     get_os_info os;
 
-    if test "${os[major]}" -lt 24; then
-        get_os_info_jammy os;
-        echo "Adding Git apt repository" \
+    echo "Adding Kitware apt repository" \
  && curl -fsSL --compressed https://apt.kitware.com/keys/kitware-archive-latest.asc | gpg --dearmor --yes -o /usr/share/keyrings/kitware-archive-keyring.gpg \
  && cat <<EOF >/etc/apt/sources.list.d/kitware.list
 deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ ${os[name]} main
 EOF
-        if ! test -f /usr/share/doc/kitware-archive-keyring/copyright; then
-            apt update;
-            rm /usr/share/keyrings/kitware-archive-keyring.gpg;
-            apt install -y --no-install-recommends kitware-archive-keyring;
-        fi
+    if ! test -f /usr/share/doc/kitware-archive-keyring/copyright; then
+        apt update;
+        rm /usr/share/keyrings/kitware-archive-keyring.gpg;
+        apt install -y --no-install-recommends kitware-archive-keyring;
     fi
 
     echo "Adding VSCode apt repository" \
@@ -45,6 +42,7 @@ dev_install() {
 
     # Install nvm and node
     export NVM_DIR=/etc/skel/.nvm;
+    mkdir -p "$NVM_DIR";
     curl -fsSL --compressed https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash;
 
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; # This loads nvm
