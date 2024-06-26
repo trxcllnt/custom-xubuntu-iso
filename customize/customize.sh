@@ -5,25 +5,6 @@ set -x;
 # Ensure we're in this script's directory
 cd "$( cd "$( dirname "$(realpath -m "${BASH_SOURCE[0]}")" )" && pwd )" || exit;
 
-# Assign variable one scope above the caller
-# Usage: local "$1" && _upvar $1 "value(s)"
-# Param: $1  Variable name to assign value to
-# Param: $*  Value(s) to assign.  If multiple values, an array is
-#            assigned, otherwise a single value is assigned.
-# See: http://fvue.nl/wiki/Bash:_Passing_variables_by_reference
-_upvar() {
-    if unset -v "$1"; then
-        if (( $# == 2 )); then
-            # shellcheck disable=SC2086
-            eval $1=\"\$2\";
-        else
-            # shellcheck disable=SC1083
-            # shellcheck disable=SC2086
-            eval $1=\(\"\${@:2}\"\);
-        fi;
-    fi
-}
-
 _expand_assoc() {
     local -;
     local key;
@@ -59,13 +40,6 @@ echo "os_id_and_ver_and_dot=${ID}${major}.${minor}";
             [id_and_ver]='${os_id_and_ver-}' \
             [id_and_ver_and_dot]='${os_id_and_ver_and_dot-}' \
         )";
-        # _upvar                                                 \
-        #     "${out_}"                                          \
-        #     "[name]='${os_name-}'"                             \
-        #     "[major]='${os_major-}'"                           \
-        #     "[minor]='${os_minor-}'"                           \
-        #     "[id_and_ver]='${os_id_and_ver-}'"                 \
-        #     "[id_and_ver_and_dot]='${os_id_and_ver_and_dot-}'" ;
     fi
 }
 
