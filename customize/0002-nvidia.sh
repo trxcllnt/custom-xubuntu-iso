@@ -11,10 +11,6 @@ nvidia_preinstall() {
     local -A os;
     get_os_info os;
 
-    if test "${os[major]}" -ge 24; then
-        get_os_info_jammy os;
-    fi
-
     echo "Downloading cuda keyring" \
  && wget --no-hsts -qO /tmp/cuda-keyring.deb \
     "https://developer.download.nvidia.com/compute/cuda/repos/${os[id_and_ver]-}/$(uname -p)/cuda-keyring_1.1-1_all.deb";

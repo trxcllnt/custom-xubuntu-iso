@@ -43,11 +43,6 @@ echo "os_id_and_ver_and_dot=${ID}${major}.${minor}";
     fi
 }
 
-get_os_info_jammy() {
-    local -;
-    get_os_info "$1" jammy "22";
-}
-
 list_script_paths() {
     local -;
     local -A os;
