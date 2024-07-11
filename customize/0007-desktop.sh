@@ -64,6 +64,9 @@ desktop_postinstall() {
 
     /tmp/sierra-gtk-theme/install.sh --no-apple;
 
+    find /usr/share/themes/Sierra-* -type f -name gtk.css -print0 \
+  | xargs -0 -r -I% sed -i 's/:not(.popup.toggle)/:not(.popup):not(.toggle)/g' %;
+
     cp -ar etc/skel/.config/autostart /etc/skel/.config/;
     cp -ar etc/skel/.config/plank /etc/skel/.config/;
     cp -ar etc/skel/.config/plank.ini /etc/skel/.config/;
