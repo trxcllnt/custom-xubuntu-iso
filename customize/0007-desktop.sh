@@ -81,9 +81,7 @@ desktop_postinstall() {
 
     rm -rf /tmp/sierra-gtk-theme;
 
-    curl -fsSL --compressed \
-        -o /etc/apparmor.d/chromium_browser \
-        https://gitlab.com/apparmor/apparmor/-/raw/master/profiles/apparmor/profiles/extras/chromium_browser?ref_type=heads;
+    cp -ar etc/apparmor.d/chromium_browser /etc/apparmor.d/;
 
     # Install backgrounds, fonts, and cursors
     if test -f assets.zip; then
