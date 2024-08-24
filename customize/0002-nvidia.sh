@@ -27,7 +27,7 @@ nvidia_packages() {
     local -;
     set -euo pipefail;
 
-    echo cuda-drivers;
+    echo nvidia-open;
     echo nvidia-container-toolkit;
 }
 
