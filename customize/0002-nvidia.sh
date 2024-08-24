@@ -20,7 +20,7 @@ nvidia_preinstall() {
     # Install nvidia-container-toolkit
     echo "Adding nvidia-container-toolkit apt repository" \
  && curl -fsSL --compressed https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/nvidia-container-toolkit-keyring.gpg \
- && curl -fsSL --compressed -o /etc/apt/sources.list.d/nvidia-container-toolkit.list "https://nvidia.github.io/libnvidia-container/${os[id_and_ver_and_dot]-}/libnvidia-container.list";
+ && curl -fsSL --compressed -o /etc/apt/sources.list.d/nvidia-container-toolkit.list "https://nvidia.github.io/libnvidia-container/ubuntu22.04/libnvidia-container.list";
 }
 
 nvidia_packages() {
