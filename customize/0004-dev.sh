@@ -65,14 +65,6 @@ if type nvm >/dev/null 2>&1; then
 fi
 EOF
 
-    cat <<"EOF" >> /etc/skel/.bashrc
-if test -n "${SSH_CONNECTION:-}" && test -z "${SSH_AUTH_SOCK:-}" && type gnome-keyring-daemon >/dev/null 2>&1; then
-    read -rsp "keyring password: " pass;
-    export "$(echo -n "${pass}" | gnome-keyring-daemon --unlock --components=ssh,secrets,pkcs11)";
-    echo "";
-fi
-EOF
-
     cp -ar etc/skel/.{npm,yarn}rc /etc/skel/;
 }
 

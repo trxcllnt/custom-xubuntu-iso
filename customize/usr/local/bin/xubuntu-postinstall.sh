@@ -61,8 +61,8 @@ if ! dpkg -s cuda > /dev/null 2>&1; then
 fi
 
 cat <<"EOF" >> ~/.bashrc
-CUDA_HOME="/usr/local/cuda";
-PATH="$PATH:$CUDA_HOME/bin";
+export CUDA_HOME="/usr/local/cuda";
+export PATH="$PATH:$CUDA_HOME/bin";
 EOF
 
 if test -f ~/.config/autostart/xubuntu-postinstall.desktop; then
