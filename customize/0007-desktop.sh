@@ -83,6 +83,8 @@ desktop_postinstall() {
 
     cp -ar etc/apparmor.d/chromium_browser /etc/apparmor.d/;
 
+    sed -i 's/appmenu-gtk-module/unity-gtk-module/g' /etc/profile.d/vala-panel-appmenu.sh;
+
     # Install backgrounds, fonts, and cursors
     if test -f assets.zip; then
         unzip -o assets.zip -d /;
