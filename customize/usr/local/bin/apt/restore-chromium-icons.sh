@@ -11,5 +11,4 @@ cp /usr/share/icons/hicolor/48x48/apps/{google-chrome,ungoogled-chromium}.png 2>
 cp /usr/share/icons/hicolor/256x256/apps/{google-chrome,ungoogled-chromium}.png 2>/dev/null || true;
 cp /usr/share/icons/hicolor/24x24/apps/{google-chrome,ungoogled-chromium}.png 2>/dev/null || true;
 cp /usr/share/icons/hicolor/128x128/apps/{google-chrome,ungoogled-chromium}.png 2>/dev/null || true;
-
-sed -i 's/Name=Ungoogled-Chromium Web Browser/Name=Chromium/g' /usr/share/applications/ungoogled-chromium.desktop;
+cp /usr/local/share/applications/ungoogled-chromium.desktop /usr/share/applications/ungoogled-chromium.desktop;
