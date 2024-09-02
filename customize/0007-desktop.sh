@@ -92,7 +92,7 @@ desktop_postinstall() {
         # Update font cache
         fc-cache -f -v;
         # Install default cursor theme
-        update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/OSX-ElCap/cursor.theme 90;
+        update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/macOS/cursor.theme 110;
         touch /var/log/xubuntu-postinstall.log && chmod 777 /var/log/xubuntu-postinstall.log;
     fi
 }

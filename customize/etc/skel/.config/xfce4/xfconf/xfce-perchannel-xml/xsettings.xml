@@ -34,7 +34,7 @@
     <property name="MenuImages" type="empty"/>
     <property name="ButtonImages" type="empty"/>
     <property name="MenuBarAccel" type="empty"/>
-    <property name="CursorThemeName" type="string" value="OSX-ElCap"/>
+    <property name="CursorThemeName" type="string" value="macOS"/>
     <property name="CursorThemeSize" type="empty"/>
     <property name="DecorationLayout" type="string" value="close,minimize,maximize:menu"/>
     <property name="ShellShowsMenubar" type="bool" value="true"/>
