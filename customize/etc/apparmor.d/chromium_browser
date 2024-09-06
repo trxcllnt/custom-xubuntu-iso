@@ -86,7 +86,7 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
        bus=system
        path=/org/freedesktop/login1
        interface=org.freedesktop.login1.Manager
-       member={SessionNew,SessionRemoved}
+       member={SessionNew,SessionRemoved,UserRemoved}
        peer=(label=unconfined),
 
   dbus (send)
