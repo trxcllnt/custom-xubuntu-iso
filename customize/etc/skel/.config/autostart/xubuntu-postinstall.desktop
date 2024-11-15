@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.9.4
+Type=Application
+Name=xubuntu-postinstall
+Comment=
+Exec=sh -ic 'bash -i /usr/local/bin/xubuntu-postinstall.sh <$(tty) 2>&1 | tee -a /var/log/xubuntu-postinstall.log'
+OnlyShowIn=XFCE;
+RunHook=0
+StartupNotify=false
+Terminal=true
+Hidden=false

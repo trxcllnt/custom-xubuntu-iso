@@ -1,0 +1,2 @@
+Update-Manager::Always-Include-Phased-Updates;
+APT::Get::Always-Include-Phased-Updates "1";

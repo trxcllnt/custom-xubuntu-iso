@@ -1,5 +1,4 @@
 out/
 mnt/
-etc/
-usr/
+assets/
 *.iso

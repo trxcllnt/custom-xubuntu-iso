@@ -6,6 +6,6 @@ cd "$( cd "$( dirname "$(realpath -m "${BASH_SOURCE[0]}")" )" && pwd )";
 set -x;
 set -euo pipefail;
 
-if test -d mnt; then
-    (cd mnt; zip -r ../root .);
+if test -d assets; then
+    (cd assets; zip -r ../customize/assets .);
 fi
