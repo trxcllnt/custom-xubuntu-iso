@@ -79,7 +79,7 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
        bus=system
        path=/org/freedesktop/DBus
        interface=org.freedesktop.DBus
-       member=ListNames
+       member={ListNames,RequestName}
        peer=(label=unconfined),
 
   dbus (receive)
@@ -95,6 +95,34 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
        interface=org.freedesktop.DBus
        member={Hello,AddMatch,Embed,GetRegisteredEvents,GetKeystrokeListeners}
        peer=(name=org.freedesktop.DBus),
+
+  dbus (send)
+       bus=accessibility
+       path=/org/a11y/atspi/accessible/root
+       interface=org.a11y.atspi.Socket
+       member=Embed
+       peer=(label=unconfined),
+
+  dbus (receive)
+       bus=accessibility
+       path=/org/a11y/atspi/accessible/root
+       interface=org.freedesktop.DBus.Properties
+       member=Set
+       peer=(label=unconfined),
+
+  dbus (send)
+       bus=accessibility
+       path=/org/a11y/atspi/registry
+       interface=org.a11y.atspi.Registry
+       member=GetRegisteredEvents
+       peer=(label=unconfined),
+
+  dbus (send)
+       bus=accessibility
+       path=/org/a11y/atspi/registry/deviceeventcontroller
+       interface=org.a11y.atspi.DeviceEventController
+       member=GetKeystrokeListeners
+       peer=(label=unconfined),
 
   dbus (send)
        bus=session
@@ -123,6 +151,10 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
        interface=org.gtk.vfs.MountTracker
        member=ListMountableInfo
        peer=(label=unconfined),
+
+  dbus (bind)
+       bus=system
+       name=nvidia.nvfbc.pid_@{pid},
 
   # Networking
   network inet stream,
