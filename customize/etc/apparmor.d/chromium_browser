@@ -185,6 +185,7 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
   @{PROC}/filesystems r,
   @{PROC}/pressure/{cpu,io,memory} r,
   @{PROC}/vmstat r,
+  @{PROC}/*/cmdline r,
   @{PROC}/ r,
   owner @{PROC}/@{pid}/task/@{tid}/stat r,
   owner @{PROC}/@{pid}/clear_refs w,
@@ -194,9 +195,9 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
   owner @{PROC}/@{pid}/setgroups w,
   owner @{PROC}/@{pid}/{uid,gid}_map w,
   owner @{PROC}/@{pid}/smaps r,
-  owner @{PROC}/@{pid}/smaps_rollup r,
   @{PROC}/@{pid}/stat r,
   @{PROC}/@{pid}/statm r,
+  @{PROC}/@{pid}/smaps_rollup r,
   owner @{PROC}/@{pid}/status r,
   owner @{PROC}/@{pid}/task/@{tid}/status r,
   @{PROC}/@{pid}/oom_{,score_}adj w,
@@ -305,6 +306,7 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
   /usr/bin/gvfs-open ixr,
   /usr/bin/kdialog ixr,
   # TODO: xfce
+  /usr/bin/xfce4-mime-helper ixr,
 
   # Importing firefox settings (requires 'r' access to @{HOME}/.mozilla/**
   # which is provided by abstractions/ubuntu-browsers.d/user-files).
