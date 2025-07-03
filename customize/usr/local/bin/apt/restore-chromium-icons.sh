@@ -12,3 +12,5 @@ cp /usr/share/icons/hicolor/256x256/apps/{google-chrome,ungoogled-chromium}.png 
 cp /usr/share/icons/hicolor/24x24/apps/{google-chrome,ungoogled-chromium}.png 2>/dev/null || true;
 cp /usr/share/icons/hicolor/128x128/apps/{google-chrome,ungoogled-chromium}.png 2>/dev/null || true;
 cp /usr/local/share/applications/ungoogled-chromium.desktop /usr/share/applications/ungoogled-chromium.desktop;
+
+apparmor_parser -r /etc/apparmor.d/chromium_browser
