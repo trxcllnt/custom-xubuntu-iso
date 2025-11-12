@@ -9,7 +9,7 @@ desktop_preinstall() {
     set -euo pipefail;
 
     echo "Adding plank apt repository" \
- && curl -fsSL --compressed "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x38AE4F60E356CE050312FA1775CFD31C9E5DB0C8" | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/ricotz-docky.gpg \
+ && curl -fsSL --compressed "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9BE528DCBA6F4EAA89326FFBB998E53B7BCC7DB8" | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/ricotz-docky.gpg \
  && cat <<EOF >/etc/apt/sources.list.d/ricotz-docky.list
 deb [arch=$(dpkg --print-architecture)] http://ppa.launchpadcontent.net/ricotz/docky/ubuntu $(. /etc/os-release; echo ${VERSION_CODENAME}) main
 EOF

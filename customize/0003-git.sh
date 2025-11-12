@@ -9,7 +9,7 @@ git_preinstall() {
     set -euo pipefail;
 
     echo "Adding Git apt repository" \
- && curl -fsSL --compressed "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE1DD270288B4E6030699E45FA1715D88E1DF1F24" | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/ubuntu-git-maintainers.gpg \
+ && curl -fsSL --compressed "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF911AB184317630C59970973E363C90F8F1B6217" | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/ubuntu-git-maintainers.gpg \
  && cat <<EOF >/etc/apt/sources.list.d/git-core-ppa.list
 deb [arch=$(dpkg --print-architecture)] http://ppa.launchpad.net/git-core/ppa/ubuntu $(. /etc/os-release; echo ${VERSION_CODENAME}) main
 EOF
