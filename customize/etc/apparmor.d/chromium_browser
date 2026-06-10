@@ -180,6 +180,7 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
   owner @{HOME}/.local/share/applications/mimeinfo.cache r,
   /tmp/.X[0-9]*-lock r,
   /tmp/.org.chromium.Chromium.*/** r,
+  /tmp/org.chromium.Chromium.*/** r,
 
   @{PROC}/self/exe ixr,
   @{PROC}/filesystems r,
@@ -188,6 +189,7 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
   @{PROC}/*/cmdline r,
   @{PROC}/ r,
   owner @{PROC}/@{pid}/task/@{tid}/stat r,
+  owner @{PROC}/@{pid}/task/@{tid}/comm rw,
   owner @{PROC}/@{pid}/clear_refs w,
   owner @{PROC}/@{pid}/cmdline r,
   owner @{PROC}/@{pid}/io r,
@@ -215,6 +217,7 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
   /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq r,
   /sys/devices/system/cpu/cpu*/cache/index*/level r,
   /sys/devices/system/cpu/cpu*/cache/index*/id r,
+  /sys/devices/system/cpu/cpu*/microcode/version r,
   /sys/devices/system/cpu/cpu*/topology/core_cpus r,
   /sys/devices/system/cpu/cpu*/topology/thread_siblings r,
   /sys/devices/system/cpu/cpu*/topology/physical_package_id r,
@@ -458,6 +461,7 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
     @{PROC}/@{pid}/oom_score_adj w,
     @{PROC}/@{pid}/status r,
     @{PROC}/@{pid}/task/@{tid}/stat r,
+    @{PROC}/@{pid}/task/@{tid}/status r,
 
     /usr/bin/@{chromium} r,
     /usr/lib/@{chromium}/@{chromium} Px,
