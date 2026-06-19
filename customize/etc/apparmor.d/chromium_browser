@@ -75,6 +75,13 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
        interface=org.freedesktop.DBus.ObjectManager
        member=GetManagedObjects,
 
+  dbus (receive)
+       bus=system
+       path=/
+       interface=org.freedesktop.DBus.ObjectManager
+       member={InterfacesAdded,InterfacesRemoved}
+       peer=(label=unconfined),
+
   dbus (send)
        bus=system
        path=/org/freedesktop/DBus
@@ -87,6 +94,34 @@ profile chromium_browser /usr/lib/@{chromium}/@{chromium} flags=(attach_disconne
        path=/org/freedesktop/login1
        interface=org.freedesktop.login1.Manager
        member={SessionNew,SessionRemoved,UserRemoved}
+       peer=(label=unconfined),
+
+  dbus (send)
+       bus=system
+       path=/org/bluez
+       interface=org.bluez.AgentManager1
+       member=UnregisterAgent
+       peer=(label=unconfined),
+
+  dbus (send)
+       bus=system
+       path=/org/bluez/hci*
+       interface=org.bluez.Adapter1
+       member={StartDiscovery,SetDiscoveryFilter,StopDiscovery}
+       peer=(label=unconfined),
+
+  dbus (receive)
+       bus=system
+       path=/org/bluez/hci*
+       interface=org.freedesktop.DBus.Properties
+       member=PropertiesChanged
+       peer=(label=unconfined),
+
+  dbus (receive)
+       bus=system
+       path=/org/bluez/hci*/*
+       interface=org.freedesktop.DBus.Properties
+       member=PropertiesChanged
        peer=(label=unconfined),
 
   dbus (send)
