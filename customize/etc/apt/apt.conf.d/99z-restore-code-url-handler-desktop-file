@@ -1,0 +1,1 @@
+DPkg::Post-Invoke {"/usr/local/bin/apt/restore-code-url-handler-desktop-file.sh || true";};
